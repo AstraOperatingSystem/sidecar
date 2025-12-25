@@ -37,13 +37,14 @@ async def ping(interaction: Interaction) -> None:
 
 @client.tree.command(name="song", description="Play song")
 async def song(interaction: Interaction, url: str) -> None:
+	await interaction.response.defer(thinking=True)
 	if player.idle_active:
 		player.play(url)
 		player.wait_until_playing()
-		await interaction.response.send_message("Playing!")
+		await interaction.followup.send("Playing!")
 	else:
 		playq.put(url)
-		await interaction.response.send_message("Queued!")
+		await interaction.followup.send("Queued!")
 
 @client.tree.command(name="skip", description="Skip song")
 async def skip(interaction: Interaction) -> None:
